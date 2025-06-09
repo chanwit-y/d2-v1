@@ -3,10 +3,26 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "next dev packages/client --turbopack"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@radix-ui/themes": "^3.2.1",
+    "@uiw/react-md-editor": "^4.0.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "install": "^0.13.0",
+    "lucide-react": "^0.513.0",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.3.0"
   }
 }
