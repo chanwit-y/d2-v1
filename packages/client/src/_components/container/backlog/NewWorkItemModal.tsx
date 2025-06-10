@@ -57,11 +57,41 @@ const NewWorkItemModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[1200px] h-[90vh] bg-[#1e1e1e] border-gray-700 p-0 overflow-hidden">
+      <DialogContent className='mx-4 max-w-[80vw] h-[90vh] bg-[#1e1e1e] border-gray-700 p-0 overflow-hidden'>
+
+        {/* <DialogTitle className="sr-only">New {workItemType}</DialogTitle>
+        <DialogDescription className="sr-only">Create a new {workItemType.toLowerCase()} work item</DialogDescription> */}
+        <DialogHeader className="bg-[#252526] border-b border-gray-700 p-4 flex flex-row items-center justify-between space-y-0">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-white font-semibold uppercase tracking-wide">{workItemType.toUpperCase()}</span>
+            </div>
+            {/* {showTitleError && (
+              <div className="flex items-center gap-2 text-red-400">
+                <span className="text-red-400">●</span>
+                <span className="text-sm">Field 'Title' cannot be empty.</span>
+              </div>
+            )} */}
+          </div>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-400 hover:text-white">
+            <X className="w-4 h-4" />
+          </Button>
+        </DialogHeader>
+        <div>Hi</div>
+
+        {/* <div className="p-4 bg-[#252526] border-b border-gray-700">
+          <Input
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="Enter title"
+            className={`bg-[#1e1e1e] border-2 text-white text-lg h-12 ${showTitleError ? 'border-red-500' : 'border-blue-500'}`}
+          />
+        </div> */}
+      </DialogContent>
+      {/* <DialogContent className=" mx-4 max-w-[1200px] h-[90vh] bg-[#1e1e1e] border-gray-700 p-0 overflow-hidden">
         <DialogTitle className="sr-only">New {workItemType}</DialogTitle>
         <DialogDescription className="sr-only">Create a new {workItemType.toLowerCase()} work item</DialogDescription>
         
-        {/* Header */}
         <DialogHeader className="bg-[#252526] border-b border-gray-700 p-4 flex flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -79,7 +109,6 @@ const NewWorkItemModal = ({
           </Button>
         </DialogHeader>
 
-        {/* Title Input */}
         <div className="p-4 bg-[#252526] border-b border-gray-700">
           <Input 
             value={title} 
@@ -89,7 +118,6 @@ const NewWorkItemModal = ({
           />
         </div>
 
-        {/* Tags Section */}
         <div className="p-4 bg-[#252526] border-b border-gray-700 space-y-3">
           <h3 className="text-white font-medium text-sm">Tags</h3>
           <div className="space-y-2">
@@ -116,11 +144,8 @@ const NewWorkItemModal = ({
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex flex-1 overflow-hidden flex-col">
-          {/* Content Area */}
           <div className="flex-1 overflow-auto p-6 space-y-6 px-[24px] py-6">
-            {/* Description with MDEditor */}
             <div className="space-y-3">
               <h3 className="text-white font-medium">Description</h3>
               <div className="border border-gray-600 rounded overflow-hidden" data-color-mode="dark">
@@ -136,7 +161,6 @@ const NewWorkItemModal = ({
             </div>
           </div>
 
-          {/* Bottom Actions */}
           <div className="border-t border-gray-700 bg-[#252526] p-4">
             <div className="flex items-center justify-end">
               <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -146,8 +170,8 @@ const NewWorkItemModal = ({
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+       */}
+    </Dialog >
   );
 };
 

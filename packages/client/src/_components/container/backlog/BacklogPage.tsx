@@ -4,6 +4,7 @@ import BacklogGrid from './BacklogGrid';
 import NewWorkItemModal from './NewWorkItemModal';
 import { WorkItem } from './WorkItemRow';
 import BacklogHeader from './BacklogHeader';
+import WorkItemModal from './WorkItemModal';
 
 const mockData: WorkItem[] = [
   {
@@ -264,24 +265,27 @@ const BacklogPage = () => {
 
   return (
     <div className="h-full">
-      <BacklogHeader 
+      <BacklogHeader
         onNewWorkItem={() => setIsNewWorkItemModalOpen(true)}
       />
 
       <div className="p-6">
-        <BacklogGrid 
+        <BacklogGrid
           workItems={workItems}
           onToggleExpand={handleToggleExpand}
           onExpandAll={expandAll}
           onCollapseAll={collapseAll}
         />
       </div>
-
-      <NewWorkItemModal
+      <WorkItemModal
+        isOpen={isNewWorkItemModalOpen}
+        onClose={() => setIsNewWorkItemModalOpen(false)}
+      />
+      {/* <NewWorkItemModal
         isOpen={isNewWorkItemModalOpen}
         onClose={() => setIsNewWorkItemModalOpen(false)}
         workItemType="Epic"
-      />
+      /> */}
     </div>
   );
 };

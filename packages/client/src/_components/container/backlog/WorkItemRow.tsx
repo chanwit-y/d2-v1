@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/_components/common/button';
-import { Plus, ChevronRight, ChevronDown, Crown } from 'lucide-react';
+import { Plus, ChevronRight, ChevronDown, Crown, NotebookText, CupSoda } from 'lucide-react';
 
 export interface WorkItem {
   id: string;
@@ -32,13 +32,15 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
       case 'Epic':
         return <Crown className="w-4 h-4 text-yellow-500" />;
       case 'Feature':
-        return <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center">
-          <div className="w-2 h-2 bg-white rounded-sm"></div>
-        </div>;
+        return <CupSoda className="w-4 h-4 text-purple-500" />;
+        // return <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center">
+        //   <div className="w-2 h-2 bg-white rounded-sm"></div>
+        // </div>;
       case 'User Story':
-        return <div className="w-4 h-4 bg-blue-500 rounded-sm flex items-center justify-center">
-          <div className="w-2 h-2 bg-white rounded-sm"></div>
-        </div>;
+        return <NotebookText className="w-4 h-4 text-blue-500" />;
+        // return <div className="w-4 h-4 bg-blue-500 rounded-sm flex items-center justify-center">
+        //   <div className="w-2 h-2 bg-white rounded-sm"></div>
+        // </div>;
       default:
         return null;
     }

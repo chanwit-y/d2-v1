@@ -28,7 +28,7 @@ const BacklogGrid = ({ workItems, onToggleExpand, onExpandAll, onCollapseAll }: 
         <div className="col-span-1">State</div>
         {/* <div className="col-span-1">Effort</div> */}
         {/* <div className="col-span-1">Business Value</div> */}
-        <div className="col-span-1">Value Area</div>
+        <div className="col-span-1">Area</div>
         <div className="col-span-1">Tags</div>
       </div>
 
