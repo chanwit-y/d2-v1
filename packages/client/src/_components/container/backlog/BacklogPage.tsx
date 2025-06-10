@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import BacklogGrid from './BacklogGrid';
-import NewWorkItemModal from './NewWorkItemModal';
 import { WorkItem } from './WorkItemRow';
 import BacklogHeader from './BacklogHeader';
 import WorkItemModal from './WorkItemModal';
@@ -282,11 +281,6 @@ const BacklogPage = () => {
         isOpen={isNewWorkItemModalOpen}
         onClose={() => setIsNewWorkItemModalOpen(false)}
       />
-      {/* <NewWorkItemModal
-        isOpen={isNewWorkItemModalOpen}
-        onClose={() => setIsNewWorkItemModalOpen(false)}
-        workItemType="Epic"
-      /> */}
     </div>
   );
 };
