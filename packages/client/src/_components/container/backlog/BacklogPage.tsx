@@ -278,6 +278,7 @@ const BacklogPage = () => {
         />
       </div>
       <WorkItemModal
+        type="User Story"
         isOpen={isNewWorkItemModalOpen}
         onClose={() => setIsNewWorkItemModalOpen(false)}
       />
