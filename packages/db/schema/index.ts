@@ -28,3 +28,10 @@ export const items = pgTable('items', {
   // Change 3 to the dimension of your embeddings (e.g., 1536).
   embedding: vector('embedding', 3), 
 });
+
+export const workItems = pgTable('work_items', {
+  id: serial('id').primaryKey(),
+  title: text('name').notNull(),
+  detail: text('detail'),
+  embedding: vector('embedding', 8192),
+});
