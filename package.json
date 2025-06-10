@@ -5,7 +5,8 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "dev": "next dev packages/client --turbopack"
+    "dev": "next dev packages/client --turbopack",
+    "db:gen": "cd packages/db && npx drizzle-kit push"
   },
   "devDependencies": {
     "@types/bun": "latest",
