@@ -1,228 +1,102 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BacklogGrid from './BacklogGrid';
 import { WorkItem } from './WorkItemRow';
 import BacklogHeader from './BacklogHeader';
 import WorkItemModal from './WorkItemModal';
-
-const mockData: WorkItem[] = [
-  {
-    id: '1',
-    order: 1,
-    type: 'Epic',
-    title: 'Common',
-    state: 'New',
-    valueArea: 'Business',
-    tags: [],
-    expanded: false,
-    children: [
-      {
-        id: '1-1',
-        order: 1,
-        type: 'Feature',
-        title: 'Ground Work',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: [
-          {
-            id: '1-1-1',
-            order: 1,
-            type: 'User Story',
-            title: 'UI Prototype',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          },
-          {
-            id: '1-1-2',
-            order: 2,
-            type: 'User Story',
-            title: 'POC',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          }
-        ]
-      },
-      {
-        id: '1-2',
-        order: 2,
-        type: 'Feature',
-        title: 'Document',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: [
-          {
-            id: '1-2-1',
-            order: 1,
-            type: 'User Story',
-            title: 'Database',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          },
-          {
-            id: '1-2-2',
-            order: 2,
-            type: 'User Story',
-            title: 'Service Operation',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          }
-        ]
-      },
-      {
-        id: '1-3',
-        order: 3,
-        type: 'Feature',
-        title: 'Development',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: [
-          {
-            id: '1-3-1',
-            order: 1,
-            type: 'User Story',
-            title: 'Requirement',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          },
-          {
-            id: '1-3-2',
-            order: 2,
-            type: 'User Story',
-            title: 'Data',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          }
-        ]
-      },
-      {
-        id: '1-4',
-        order: 4,
-        type: 'Feature',
-        title: 'Deployment',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: [
-          {
-            id: '1-4-1',
-            order: 1,
-            type: 'User Story',
-            title: 'Project Starter',
-            state: 'New',
-            valueArea: 'Business',
-            tags: []
-          }
-        ]
-      },
-      {
-        id: '1-5',
-        order: 5,
-        type: 'Feature',
-        title: 'Training',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: []
-      },
-      {
-        id: '1-6',
-        order: 6,
-        type: 'Feature',
-        title: 'QA and Issue',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: []
-      },
-      {
-        id: '1-7',
-        order: 7,
-        type: 'Feature',
-        title: 'Maintenance',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: []
-      }
-    ]
-  },
-  {
-    id: '2',
-    order: 2,
-    type: 'Epic',
-    title: 'MOOE',
-    state: 'New',
-    valueArea: 'Business',
-    tags: [],
-    expanded: false,
-    children: [
-      {
-        id: '2-1',
-        order: 1,
-        type: 'Feature',
-        title: 'MOOE Feature 1',
-        state: 'New',
-        valueArea: 'Business',
-        tags: [],
-        expanded: false,
-        children: []
-      }
-    ]
-  },
-  {
-    id: '3',
-    order: 3,
-    type: 'Epic',
-    title: 'CHOE',
-    state: 'New',
-    valueArea: 'Business',
-    tags: [],
-    expanded: false,
-    children: []
-  },
-  {
-    id: '4',
-    order: 4,
-    type: 'Epic',
-    title: 'OE Assessment',
-    state: 'New',
-    valueArea: 'Business',
-    tags: [],
-    expanded: false,
-    children: []
-  },
-  {
-    id: '5',
-    order: 5,
-    type: 'Epic',
-    title: 'Activity 2',
-    state: 'New',
-    valueArea: 'Business',
-    tags: [],
-    expanded: false,
-    children: []
-  }
-];
+import { Toaster, toast } from 'sonner'
+import { getWorkItems } from '@/app/_server/backlog';
+// import { useToast } from '@/_components/hook/use_toast';
+// import { ToastAction } from '@/_components/common/toast';
 
 const BacklogPage = () => {
-  const [workItems, setWorkItems] = useState<WorkItem[]>(mockData);
+  const [workItems, setWorkItems] = useState<WorkItem[]>([]);
   const [isNewWorkItemModalOpen, setIsNewWorkItemModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [modalMode, setModalMode] = useState<'view' | 'edit'>('edit');
+  const [editWorkItem, setEditWorkItem] = useState<{
+    id: number;
+    title: string;
+    description: string;
+    type: string;
+    parentId: number;
+  } | null>(null);
+  const [parentWorkItem, setParentWorkItem] = useState<{
+    id: number;
+    type: 'Epic' | 'Feature' | 'User Story';
+    title: string;
+  } | null>(null);
+
+  // Fetch work items from database on component mount
+  useEffect(() => {
+    const fetchWorkItems = async () => {
+      try {
+        setLoading(true);
+        const items = await getWorkItems();
+        setWorkItems(items);
+      } catch (error) {
+        console.error('Error fetching work items:', error);
+        toast.error('Failed to load work items');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkItems();
+  }, []);
+
+  // Refresh work items after creating a new one
+  const refreshWorkItems = async () => {
+    try {
+      const items = await getWorkItems();
+      setWorkItems(items);
+    } catch (error) {
+      console.error('Error refreshing work items:', error);
+    }
+  };
+
+  // Handle view work item (opens in preview mode)
+  const handleView = (item: WorkItem) => {
+    setModalMode('view');
+    setEditWorkItem({
+      id: parseInt(item.id),
+      title: item.title,
+      description: item.description || '',
+      type: item.type,
+      parentId: item.parentId || 0,
+    });
+    setIsNewWorkItemModalOpen(true);
+  };
+
+  // Handle edit work item (opens in edit mode)
+  const handleEdit = (item: WorkItem) => {
+    setModalMode('edit');
+    setEditWorkItem({
+      id: parseInt(item.id),
+      title: item.title,
+      description: item.description || '',
+      type: item.type,
+      parentId: item.parentId || 0,
+    });
+    setIsNewWorkItemModalOpen(true);
+  };
+
+  // Handle add child work item
+  const handleAddChild = (parentItem: WorkItem) => {
+    setModalMode('edit');
+    setParentWorkItem({
+      id: parseInt(parentItem.id),
+      type: parentItem.type,
+      title: parentItem.title,
+    });
+    setIsNewWorkItemModalOpen(true);
+  };
+
+  // Handle new work item from header
+  const handleNewWorkItem = () => {
+    setModalMode('edit');
+    setIsNewWorkItemModalOpen(true);
+  };
 
   const toggleExpand = (id: string, items: WorkItem[] = workItems): WorkItem[] => {
     return items.map(item => {
@@ -262,11 +136,29 @@ const BacklogPage = () => {
     setWorkItems(collapseItems(workItems));
   };
 
+  // const { toast } = useToast();
+
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="text-white text-sm">Loading work items...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full">
       <BacklogHeader
-        onNewWorkItem={() => setIsNewWorkItemModalOpen(true)}
+        onNewWorkItem={handleNewWorkItem}
       />
+      {/* <button onClick={() => {
+        console.log("clicked");
+        toast({ title: "Hello", description: "Hello", action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction> })
+      }}>Click me</button> */}
+
+      {/* <button onClick={() => toast.success('Event has been created')}>
+        Give me a toast
+      </button> */}
 
       <div className="p-6">
         <BacklogGrid
@@ -274,12 +166,24 @@ const BacklogPage = () => {
           onToggleExpand={handleToggleExpand}
           onExpandAll={expandAll}
           onCollapseAll={collapseAll}
+          onView={handleView}
+          onEdit={handleEdit}
+          onAddChild={handleAddChild}
         />
       </div>
       <WorkItemModal
-        type="User Story"
+        type="Epic"
+        mode={modalMode}
         isOpen={isNewWorkItemModalOpen}
-        onClose={() => setIsNewWorkItemModalOpen(false)}
+        editWorkItem={editWorkItem}
+        parentWorkItem={parentWorkItem}
+        onClose={() => {
+          setIsNewWorkItemModalOpen(false);
+          setEditWorkItem(null); // Clear edit data
+          setParentWorkItem(null); // Clear parent data
+          setModalMode('edit'); // Reset to edit mode
+          refreshWorkItems(); // Refresh data after closing modal
+        }}
       />
     </div>
   );

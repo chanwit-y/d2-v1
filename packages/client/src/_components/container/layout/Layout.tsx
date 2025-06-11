@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import TopNavigation from '@/_components/container/layout/TopNavigation';
 import AppSidebar from '@/_components/container/layout/AppSidebar';
+import { Toaster } from 'sonner';
+// import { Toaster } from '@/_components/common/toaster';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,6 +26,9 @@ const Layout = ({ children }: LayoutProps) => {
         <main className="flex-1 overflow-auto">
           {children}
         </main>
+
+        <Toaster richColors  />
+        {/* <Toaster /> */}
       </div>
     </div>
   );

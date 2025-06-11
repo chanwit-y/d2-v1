@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Button } from '@/_components/common/button';
-import { Plus, ChevronRight, ChevronDown, Crown, NotebookText, CupSoda } from 'lucide-react';
+import { Plus, ChevronRight, ChevronDown, Crown, NotebookText, CupSoda, Eye, Edit } from 'lucide-react';
 
 export interface WorkItem {
   id: string;
@@ -15,15 +14,20 @@ export interface WorkItem {
   tags: string[];
   children?: WorkItem[];
   expanded?: boolean;
+  description?: string;
+  parentId?: number;
 }
 
 interface WorkItemRowProps {
   item: WorkItem;
   level: number;
   onToggleExpand: (id: string) => void;
+  onView?: (item: WorkItem) => void;
+  onEdit?: (item: WorkItem) => void;
+  onAddChild?: (parentItem: WorkItem) => void;
 }
 
-const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
+const WorkItemRow = ({ item, level, onToggleExpand, onView, onEdit, onAddChild }: WorkItemRowProps) => {
   const hasChildren = item.children && item.children.length > 0;
   const isExpanded = item.expanded && hasChildren;
 
@@ -49,7 +53,7 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
   return (
     <React.Fragment>
       <div 
-        className="grid grid-cols-12 gap-4 py-2 px-4 hover:bg-gray-800/50 transition-colors border-b border-gray-800/50 items-center group cursor-cell"
+        className="grid grid-cols-12 gap-4 py-2 px-4 hover:bg-gray-800/50 transition-colors border-b border-gray-800/50 items-center group"
         style={{ paddingLeft: `${16 + level * 24}px` }}
       >
         {/* Add button */}
@@ -58,21 +62,28 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
             variant="ghost" 
             size="sm" 
             className="opacity-0 group-hover:opacity-100 transition-opacity p-1 h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent row click
+              onAddChild?.(item);
+            }}
           >
             <Plus className="w-3 h-3" />
           </Button>
         </div>
         
         {/* Order - only show for Epic type */}
-        <div className="col-span-1 text-[10px] text-gray-400 text-right">
+        {/* <div className="col-span-1 text-[10px] text-gray-400 text-right">
           {item.type === 'Epic' ? item.order : ''}
-        </div>
+        </div> */}
         
         {/* Work Item Type */}
         <div className="col-span-2 flex items-center gap-2">
           {hasChildren && (
             <button
-              onClick={() => onToggleExpand(item.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleExpand(item.id);
+              }}
               className="p-1 hover:bg-gray-700 rounded transition-colors"
             >
               {isExpanded ? (
@@ -98,16 +109,6 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
           <span className="text-[10px] text-gray-300">{item.state}</span>
         </div>
         
-        {/* Effort */}
-        {/* <div className="col-span-1 text-[10px] text-gray-400">
-          {item.effort || ''}
-        </div> */}
-        
-        {/* Business Value */}
-        {/* <div className="col-span-1 text-[10px] text-gray-400">
-          {item.businessValue || ''}
-        </div> */}
-        
         {/* Value Area */}
         <div className="col-span-1 text-[10px] text-gray-300">
           {item.valueArea}
@@ -117,6 +118,32 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
         <div className="col-span-1 text-[10px] text-gray-400">
           {item.tags.join(', ')}
         </div>
+
+        {/* Actions - View and Edit icons */}
+        <div className="col-span-1 flex items-center gap-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className=" p-1 h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation();
+              onView?.(item);
+            }}
+          >
+            <Eye className="w-3 h-3 text-blue-400" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="p-1 h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(item);
+            }}
+          >
+            <Edit className="w-3 h-3 text-green-400" />
+          </Button>
+        </div>
       </div>
       
       {isExpanded && item.children?.map(child => (
@@ -124,7 +151,10 @@ const WorkItemRow = ({ item, level, onToggleExpand }: WorkItemRowProps) => {
           key={child.id} 
           item={child} 
           level={level + 1} 
-          onToggleExpand={onToggleExpand} 
+          onToggleExpand={onToggleExpand}
+          onView={onView}
+          onEdit={onEdit}
+          onAddChild={onAddChild}
         />
       ))}
     </React.Fragment>

@@ -31,7 +31,9 @@ export const items = pgTable('items', {
 
 export const workItems = pgTable('work_items', {
   id: serial('id').primaryKey(),
-  title: text('name').notNull(),
-  detail: text('detail'),
-  embedding: vector('embedding', 8192),
-});
+  title: text('title').notNull(),
+  description: text('detail').notNull(),
+  type: text('type').notNull(),
+  parentId: integer('parent_id').notNull(),
+  embedding: vector('embedding', 1536),
+}); 

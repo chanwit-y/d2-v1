@@ -33,12 +33,13 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 	return (
 		<>
 			{/* Main Toolbar */}
-			<div className="flex items-center justify-between gap-4 px-4 bg-[#252526] border-b border-gray-700 text-[10px]">
+			<div className="flex items-center justify-between gap-4 px-4 py-2 bg-[#252526] border-b border-gray-700 text-[10px]">
 				{/* Left side - BacklogToolbar */}
-				<BacklogToolbar
+				{/* <BacklogToolbar
 					onExpandAll={onExpandAll}
 					onCollapseAll={onCollapseAll}
-				/>
+				/> */}
+				<div></div>
 
 				{/* Right side - View Filter and Control Icons */}
 				<div className="flex items-center gap-2">
@@ -86,7 +87,7 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 							<Filter className="w-4 h-4" />
 						</Button>
 
-						<Button
+						{/* <Button
 							variant="ghost"
 							size="xs"
 							onClick={onExpandAll}
@@ -94,7 +95,7 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 							title="Expand All"
 						>
 							<Expand className="w-4 h-4" />
-						</Button>
+						</Button> */}
 
 						<Button
 							variant="ghost"
@@ -105,14 +106,14 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 							<Settings className="w-4 h-4" />
 						</Button>
 
-						<Button
+						{/* <Button
 							variant="ghost"
 							size="xs"
 							className="text-gray-300 hover:text-white hover:bg-gray-700 w-8 h-8 p-0"
 							title="Fullscreen"
 						>
 							<Maximize2 className="w-4 h-4" />
-						</Button>
+						</Button> */}
 					</div>
 				</div>
 			</div>

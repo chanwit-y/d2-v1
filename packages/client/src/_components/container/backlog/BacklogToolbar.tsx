@@ -14,11 +14,11 @@ const BacklogToolbar = ({
   onCollapseAll
 }: BacklogToolbarProps) => {
   return (
-    <div className="flex items-center gap-2 py-2">
+    <div className="flex items-center gap-2">
       <div className="flex items-center border border-gray-700 rounded">
         <Button
           variant="ghost"
-          size="xs"
+          size="xxs"
           onClick={onExpandAll}
           className="border-r border-gray-700 rounded-none text-gray-300 hover:text-white hover:bg-gray-700"
         >
@@ -26,7 +26,7 @@ const BacklogToolbar = ({
         </Button>
         <Button
           variant="ghost"
-          size="xs"
+          size="xxs"
           onClick={onCollapseAll}
           className="rounded-none text-gray-300 hover:text-white hover:bg-gray-700"
         >
