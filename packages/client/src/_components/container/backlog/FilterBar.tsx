@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/_components/common/button';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from '@/_components/common/select';
 import { Input } from '@/_components/common/input';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X, Search, SearchCheck } from 'lucide-react';
+import { ResetIcon } from '@radix-ui/react-icons';
 
 // Zod schema for filter form validation
 const filterSchema = z.object({
@@ -50,9 +51,9 @@ const FilterBar = ({ isVisible, onClose, onFilterChange }: FilterBarProps) => {
   });
 
   // Watch for changes and call onFilterChange
-  const watchedValues = watch();
-  // React.useEffect(() => {
-  //   onFilterChange?.(watchedValues);
+  // const watchedValues = watch();
+  // useEffect(() => {
+  //   // onFilterChange?.(watchedValues);
   // }, [watchedValues, onFilterChange]);
 
   const onSubmit = (data: FilterForm) => {
@@ -68,16 +69,15 @@ const FilterBar = ({ isVisible, onClose, onFilterChange }: FilterBarProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center gap-4 py-3 px-4 bg-[#2d2d30] border-b border-gray-700 text-[10px]">
+      <div className="flex items-center gap-4 py-2 px-4 bg-[#2d2d30] border-b border-gray-700 text-[10px]">
         {/* Keyword Filter */}
         <div className="relative flex items-center">
           <Search className="absolute left-3 w-4 h-4 text-gray-400" />
           <Input
             {...register('keyword')}
             placeholder="Filter by keyword"
-            className={`pl-10 bg-[#1e1e1e] border-gray-600 text-white placeholder-gray-400 min-w-[200px] text-xs ${
-              errors.keyword ? 'border-red-500' : ''
-            }`}
+            className={`pl-10 bg-[#1e1e1e] border-gray-600 text-white placeholder-gray-400 min-w-[200px] text-xs ${errors.keyword ? 'border-red-500' : ''
+              }`}
           />
           {errors.keyword && (
             <span className="absolute -bottom-5 left-0 text-red-500 text-xs">
@@ -162,13 +162,21 @@ const FilterBar = ({ isVisible, onClose, onFilterChange }: FilterBarProps) => {
         {/* Action Buttons */}
         <div className="ml-auto flex items-center gap-2">
           <Button
+            type="submit"
+            variant="ghost"
+            size="xs"
+            className="text-gray-300 hover:text-white hover:bg-gray-700 text-xs px-3"
+          >
+            <SearchCheck />
+          </Button>
+          <Button
             type="button"
             variant="ghost"
             size="xs"
             onClick={handleReset}
             className="text-gray-300 hover:text-white hover:bg-gray-700 text-xs px-3"
           >
-            Reset
+            <ResetIcon />
           </Button>
           <Button
             type="button"

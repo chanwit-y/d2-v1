@@ -67,7 +67,7 @@ const BacklogPage = () => {
 
     setCurrentFilters(apiFilters);
     fetchWorkItems(apiFilters);
-  }, [fetchWorkItems]);
+  }, []);
 
   // Refresh work items after creating/editing
   const refreshWorkItems = async () => {
@@ -177,7 +177,7 @@ const BacklogPage = () => {
       <FilterBar
         isVisible={isFilterBarVisible}
         onClose={() => setIsFilterBarVisible(false)}
-        // onFilterChange={handleFilterChange}
+        onFilterChange={handleFilterChange}
       />
 
       <div className="p-6">
