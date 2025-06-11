@@ -85,6 +85,120 @@ export const getWorkItems = async () => {
   }
 };
 
+export interface WorkItemFilters {
+  keyword?: string;
+  type?: string;
+  state?: string;
+  area?: string;
+  tags?: string;
+}
+
+export const getFilteredWorkItems = async (filters: WorkItemFilters = {}) => {
+  try {
+    let query = db.select().from(workItems);
+    
+    // Apply filters
+    const conditions: any[] = [];
+    
+    // Keyword filter - search in title and description
+    if (filters.keyword && filters.keyword.trim() !== '') {
+      const keyword = `%${filters.keyword.toLowerCase()}%`;
+      conditions.push(
+        `(LOWER(title) LIKE '${keyword}' OR LOWER(detail) LIKE '${keyword}')`
+      );
+    }
+    
+    // Type filter
+    if (filters.type && filters.type !== 'all') {
+      let typeValue = filters.type;
+      if (typeValue === 'user-story') typeValue = 'User Story';
+      else if (typeValue === 'feature') typeValue = 'Feature';
+      else if (typeValue === 'epic') typeValue = 'Epic';
+      conditions.push(`type = '${typeValue}'`);
+    }
+
+    // Note: state and area filters would require those columns in the database
+    // For now, we'll just filter on the client side since they're default values
+    
+    const items = await db.select().from(workItems);
+    
+    // Apply client-side filtering for fields not in database
+    let filteredItems = items;
+    
+    // Filter by keyword (server-side logic applied client-side for now)
+    if (filters.keyword && filters.keyword.trim() !== '') {
+      const keyword = filters.keyword.toLowerCase();
+      filteredItems = filteredItems.filter(item => 
+        item.title.toLowerCase().includes(keyword) || 
+        (item.description && item.description.toLowerCase().includes(keyword))
+      );
+    }
+    
+    // Filter by type
+    if (filters.type && filters.type !== 'all') {
+      let typeValue = filters.type;
+      if (typeValue === 'user-story') typeValue = 'User Story';
+      else if (typeValue === 'feature') typeValue = 'Feature';
+      else if (typeValue === 'epic') typeValue = 'Epic';
+      
+      filteredItems = filteredItems.filter(item => item.type === typeValue);
+    }
+    
+    // Transform filtered items
+    const transformedItems = filteredItems.map(item => ({
+      id: item.id.toString(),
+      order: item.id,
+      type: item.type as 'Epic' | 'Feature' | 'User Story',
+      title: item.title,
+      state: 'New' as const,
+      valueArea: 'Business',
+      tags: [],
+      expanded: false,
+      children: [] as any[],
+      description: item.description,
+      parentId: item.parentId,
+    }));
+
+    // Build hierarchical structure (same logic as getWorkItems)
+    const itemMap = new Map();
+    const rootItems: any[] = [];
+
+    transformedItems.forEach(item => {
+      itemMap.set(item.id, { ...item, children: [] });
+    });
+
+    transformedItems.forEach(item => {
+      const transformedItem = itemMap.get(item.id);
+      
+      if (item.parentId === 0) {
+        rootItems.push(transformedItem);
+      } else {
+        const parent = itemMap.get(item.parentId.toString());
+        if (parent) {
+          parent.children.push(transformedItem);
+        } else {
+          rootItems.push(transformedItem);
+        }
+      }
+    });
+
+    const cleanItems = (items: any[]): any[] => {
+      return items.map(item => {
+        const { parentId, ...cleanItem } = item;
+        if (cleanItem.children.length > 0) {
+          cleanItem.children = cleanItems(cleanItem.children);
+        }
+        return cleanItem;
+      });
+    };
+
+    return cleanItems(rootItems);
+  } catch (error) {
+    console.error("Error fetching filtered work items:", error);
+    return [];
+  }
+};
+
 export const updateWorkItem = async (
   id: number,
   updates: Partial<typeof workItems.$inferInsert>

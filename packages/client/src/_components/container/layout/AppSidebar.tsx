@@ -1,32 +1,41 @@
-
+'use client'
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/_components/common/button';
 import { Database, Bot, Settings } from 'lucide-react';
-
 
 interface AppSidebarProps {
 	isOpen: boolean;
 }
 
 const AppSidebar = ({ isOpen }: AppSidebarProps) => {
+	const router = useRouter();
+	const pathname = usePathname();
 
 	const menuItems = [
 		{
 			icon: Bot,
 			label: 'Home',
-			isActive: true
+			path: '/',
+			isActive: pathname === '/'
 		},
 		{
 			icon: Database,
 			label: 'Database',
-			isActive: false
+			path: '/backlog',
+			isActive: pathname === '/backlog'
 		},
 		{
 			icon: Settings,
 			label: 'Settings',
-			isActive: false
+			path: '/settings',
+			isActive: pathname === '/settings'
 		}
 	];
+
+	const handleNavigation = (path: string) => {
+		router.push(path);
+	};
 
 	return (
 		<aside className={`bg-[#252526] border-r border-gray-800 h-full transition-all duration-300 ${
@@ -39,6 +48,7 @@ const AppSidebar = ({ isOpen }: AppSidebarProps) => {
 						<Button
 							key={index}
 							variant="ghost"
+							onClick={() => handleNavigation(item.path)}
 							className={`w-8 h-8 p-0 justify-center text-gray-300 hover:text-white hover:bg-gray-700 ${item.isActive
 								? 'bg-gray-700 hover:bg-gray-700 '
 								: 'hover:bg-gray-700'

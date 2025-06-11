@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import TopNavigation from '@/_components/container/layout/TopNavigation';
 import AppSidebar from '@/_components/container/layout/AppSidebar';
+import PageTransition from '@/_components/container/layout/PageTransition';
 import { Toaster } from 'sonner';
 // import { Toaster } from '@/_components/common/toaster';
 
@@ -24,7 +25,9 @@ const Layout = ({ children }: LayoutProps) => {
         <AppSidebar isOpen={isSidebarOpen} />
         
         <main className="flex-1 overflow-auto">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </main>
 
         <Toaster richColors  />

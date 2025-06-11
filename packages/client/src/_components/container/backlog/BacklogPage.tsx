@@ -1,19 +1,22 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BacklogGrid from './BacklogGrid';
 import { WorkItem } from './WorkItemRow';
 import BacklogHeader from './BacklogHeader';
 import WorkItemModal from './WorkItemModal';
+import FilterBar from './FilterBar';
 import { Toaster, toast } from 'sonner'
-import { getWorkItems } from '@/app/_server/backlog';
+import { getWorkItems, getFilteredWorkItems, WorkItemFilters } from '@/app/_server/backlog';
 // import { useToast } from '@/_components/hook/use_toast';
 // import { ToastAction } from '@/_components/common/toast';
 
 const BacklogPage = () => {
   const [workItems, setWorkItems] = useState<WorkItem[]>([]);
   const [isNewWorkItemModalOpen, setIsNewWorkItemModalOpen] = useState(false);
+  const [isFilterBarVisible, setIsFilterBarVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [modalMode, setModalMode] = useState<'view' | 'edit'>('edit');
+  const [currentFilters, setCurrentFilters] = useState<WorkItemFilters>({});
   const [editWorkItem, setEditWorkItem] = useState<{
     id: number;
     title: string;
@@ -27,32 +30,49 @@ const BacklogPage = () => {
     title: string;
   } | null>(null);
 
-  // Fetch work items from database on component mount
-  useEffect(() => {
-    const fetchWorkItems = async () => {
-      try {
-        setLoading(true);
-        const items = await getWorkItems();
-        setWorkItems(items);
-      } catch (error) {
-        console.error('Error fetching work items:', error);
-        toast.error('Failed to load work items');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Fetch work items from database with optional filters
+  const fetchWorkItems = useCallback(async (filters: WorkItemFilters = {}) => {
+    try {
+      setLoading(true);
+      console.log('fetching work items with filters:', filters);
+      const items = Object.keys(filters).length > 0 
+        ? await getFilteredWorkItems(filters)
+        : await getWorkItems();
+      // const items = await getWorkItems()
+      setWorkItems(items);
+    } catch (error) {
+      console.error('Error fetching work items:', error);
+      toast.error('Failed to load work items');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
+  // Initial fetch on component mount
+  useEffect(() => {
     fetchWorkItems();
   }, []);
 
-  // Refresh work items after creating a new one
+  // Handle filter changes
+  const handleFilterChange = useCallback((filters: any) => {
+    console.log('handleFilterChange', filters);
+    // Convert form values to API format
+    const apiFilters: WorkItemFilters = {
+      keyword: filters.keyword || '',
+      type: filters.type || 'all',
+      state: filters.state || 'all',
+      area: filters.area || 'all',
+      tags: filters.tags || 'all',
+    };
+
+    setCurrentFilters(apiFilters);
+    fetchWorkItems(apiFilters);
+  }, [fetchWorkItems]);
+
+  // Refresh work items after creating/editing
   const refreshWorkItems = async () => {
-    try {
-      const items = await getWorkItems();
-      setWorkItems(items);
-    } catch (error) {
-      console.error('Error refreshing work items:', error);
-    }
+    console.log('refreshing work items');
+    await fetchWorkItems(currentFilters);
   };
 
   // Handle view work item (opens in preview mode)
@@ -138,27 +158,27 @@ const BacklogPage = () => {
 
   // const { toast } = useToast();
 
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-white text-sm">Loading work items...</div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="h-full flex items-center justify-center">
+  //       <div className="text-white text-sm">Loading work items...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="h-full">
       <BacklogHeader
         onNewWorkItem={handleNewWorkItem}
+        onToggleFilter={() => setIsFilterBarVisible(!isFilterBarVisible)}
+        isFilterVisible={isFilterBarVisible}
       />
-      {/* <button onClick={() => {
-        console.log("clicked");
-        toast({ title: "Hello", description: "Hello", action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction> })
-      }}>Click me</button> */}
 
-      {/* <button onClick={() => toast.success('Event has been created')}>
-        Give me a toast
-      </button> */}
+      <FilterBar
+        isVisible={isFilterBarVisible}
+        onClose={() => setIsFilterBarVisible(false)}
+        // onFilterChange={handleFilterChange}
+      />
 
       <div className="p-6">
         <BacklogGrid

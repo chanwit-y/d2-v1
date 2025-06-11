@@ -23,7 +23,7 @@ const BacklogGrid = ({ workItems, onToggleExpand, onExpandAll, onCollapseAll, on
       />
 
       {/* Grid Header */}
-      <div className="grid grid-cols-12 place-items-center gap-4 py-2 px-4 bg-[#252526] border-b border-gray-700 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+      <div className="grid grid-cols-12 place-items-start gap-4 py-2 px-4 bg-[#252526] border-b border-gray-700 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
         <div className="col-span-1 ">
           <BacklogToolbar
             onExpandAll={onExpandAll}
