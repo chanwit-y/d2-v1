@@ -5,6 +5,7 @@ import { ChatMessage } from "./ChatMessage";
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { Source } from './@types';
 import { useChat } from './ChatContext';
+import { chat } from '@/app/_server/chat';
 
 interface Message {
 	id: string;
@@ -79,6 +80,10 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 		onMessageSend?.(messageText);
 		setIsLoading(true);
 		try {
+
+			const data = await chat(messageText);
+			// console.log('data', data);
+
 			// const data = await api.chatAmigo({
 			// 	question: messageText,
 			// 	userID: email,
@@ -88,25 +93,25 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 				// const fullResponse = get(data, '[0]');
 				const fullResponse = {
 					id: 1,
-					answer: 'Hello, how can I help you today?',
+					answer: data,
 					sources: [
-						{
-							title: 'Source 1',
-							url: 'https://www.google.com',
-							content: 'Content 1',
-							path: 'path1',
-							media_type: 'text/plain',
-							relevance_score: 0.9
-						}
+						// {
+						// 	title: 'Source 1',
+						// 	url: 'https://www.google.com',
+						// 	content: 'Content 1',
+						// 	path: 'path1',
+						// 	media_type: 'text/plain',
+						// 	relevance_score: 0.9
+						// }
 					]
 				};
 				const botResponse: Message = {
 					id: String(fullResponse.id),
-					text: fullResponse.answer,
+					text: fullResponse.answer || '',
 					sender: 'bot',
 					timestamp: new Date(),
 					isStreaming: true,
-					sources: fullResponse.sources
+					sources: fullResponse.sources || []
 				};
 				setMessages((prev: Message[]) => [...prev, botResponse]);
 			}, 1000);
@@ -120,6 +125,9 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 				setError('Something went wrong.');
 			}
 		}
+		finally {
+			setIsLoading(false);
+		}
 	}, [onMessageSend, sessionID, email, setMessages]);
 
 	return (
@@ -128,6 +136,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 				className="flex flex-col overflow-hidden rounded-md shadow-lg bg-white dark:bg-zinc-900 relative"
 				style={{ width, height, minWidth: 300, maxWidth: '100%' }}
 			>
+				{/* <pre>{JSON.stringify(messages, null, 2)}</pre> */}
 				<div
 					ref={scrollContainerRef}
 					className="flex-1 p-4 pb-4 overflow-y-auto flex flex-col gap-2"

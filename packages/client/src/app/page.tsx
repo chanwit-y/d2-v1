@@ -1,4 +1,6 @@
+"use client";
 import { ChatBox } from "@/_components/container/chat/ChatBox";
+import ChatProvider from "@/_components/container/chat/ChatContext";
 import { Box, Flex } from "@radix-ui/themes";
 
 export default function Home() {
@@ -8,7 +10,9 @@ export default function Home() {
 
       </Box>
       <Box width={{ sm: '100%', md: '70%' }} height="100%">
-        <ChatBox width="100%" height="100%" />
+        <ChatProvider email="test@test.com" getAccessToken={() => Promise.resolve('')}>
+          <ChatBox width="100%" height="100%" />
+        </ChatProvider>
       </Box>
     </Flex>
   );
