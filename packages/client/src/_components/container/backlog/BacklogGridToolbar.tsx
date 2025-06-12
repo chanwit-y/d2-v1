@@ -15,15 +15,16 @@ import {
 	Maximize2,
 	ChevronDown
 } from 'lucide-react';
-import FilterBar from './FilterBar';
+import FilterBar, { FilterForm } from './FilterBar';
 import BacklogToolbar from './BacklogToolbar';
 
 interface BacklogGridToolbarProps {
 	onExpandAll: () => void;
 	onCollapseAll: () => void;
+	onFilterChange?: (filters: FilterForm) => void;
 }
 
-const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarProps) => {
+const BacklogGridToolbar = ({ onExpandAll, onCollapseAll, onFilterChange }: BacklogGridToolbarProps) => {
 	const [isFilterBarVisible, setIsFilterBarVisible] = useState(false);
 
 	const toggleFilterBar = () => {
@@ -51,7 +52,7 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 								className="text-gray-300 hover:text-white hover:bg-gray-700 gap-2 text-[10px]"
 							>
 								<Menu className="w-4 h-4" />
-									Epics
+								Epics
 								<ChevronDown className="w-4 h-4" />
 							</Button>
 						</DropdownMenuTrigger>
@@ -122,6 +123,7 @@ const BacklogGridToolbar = ({ onExpandAll, onCollapseAll }: BacklogGridToolbarPr
 			<FilterBar
 				isVisible={isFilterBarVisible}
 				onClose={() => setIsFilterBarVisible(false)}
+				onFilterChange={onFilterChange}
 			/>
 		</>
 	);

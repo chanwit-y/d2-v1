@@ -94,6 +94,7 @@ export interface WorkItemFilters {
 }
 
 export const getFilteredWorkItems = async (filters: WorkItemFilters = {}) => {
+  console.log('filters', filters);
   try {
     let query = db.select().from(workItems);
     

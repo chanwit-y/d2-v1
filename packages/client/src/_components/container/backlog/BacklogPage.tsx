@@ -7,13 +7,14 @@ import WorkItemModal from './WorkItemModal';
 import FilterBar from './FilterBar';
 import { Toaster, toast } from 'sonner'
 import { getWorkItems, getFilteredWorkItems, WorkItemFilters } from '@/app/_server/backlog';
+import { Spinner } from '@/_components/common/spinner';
 // import { useToast } from '@/_components/hook/use_toast';
 // import { ToastAction } from '@/_components/common/toast';
 
 const BacklogPage = () => {
   const [workItems, setWorkItems] = useState<WorkItem[]>([]);
   const [isNewWorkItemModalOpen, setIsNewWorkItemModalOpen] = useState(false);
-  const [isFilterBarVisible, setIsFilterBarVisible] = useState(false);
+  // const [isFilterBarVisible, setIsFilterBarVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [modalMode, setModalMode] = useState<'view' | 'edit'>('edit');
   const [currentFilters, setCurrentFilters] = useState<WorkItemFilters>({});
@@ -166,19 +167,12 @@ const BacklogPage = () => {
   //   );
   // }
 
-  return (
+  return loading ? <Spinner withBackdrop /> : (
     <div className="h-full">
       <BacklogHeader
         onNewWorkItem={handleNewWorkItem}
-        onToggleFilter={() => setIsFilterBarVisible(!isFilterBarVisible)}
-        isFilterVisible={isFilterBarVisible}
       />
 
-      <FilterBar
-        isVisible={isFilterBarVisible}
-        onClose={() => setIsFilterBarVisible(false)}
-        onFilterChange={handleFilterChange}
-      />
 
       <div className="p-6">
         <BacklogGrid
@@ -189,6 +183,7 @@ const BacklogPage = () => {
           onView={handleView}
           onEdit={handleEdit}
           onAddChild={handleAddChild}
+        onFilterChange={handleFilterChange}
         />
       </div>
       <WorkItemModal

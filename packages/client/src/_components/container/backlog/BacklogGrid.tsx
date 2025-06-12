@@ -2,6 +2,7 @@ import React from 'react';
 import WorkItemRow, { WorkItem } from './WorkItemRow';
 import BacklogGridToolbar from './BacklogGridToolbar';
 import BacklogToolbar from './BacklogToolbar';
+import { FilterForm } from './FilterBar';
 
 interface BacklogGridProps {
   workItems: WorkItem[];
@@ -11,15 +12,17 @@ interface BacklogGridProps {
   onView?: (item: WorkItem) => void;
   onEdit?: (item: WorkItem) => void;
   onAddChild?: (parentItem: WorkItem) => void;
+  onFilterChange?: (filters: FilterForm) => void;
 }
 
-const BacklogGrid = ({ workItems, onToggleExpand, onExpandAll, onCollapseAll, onView, onEdit, onAddChild }: BacklogGridProps) => {
+const BacklogGrid = ({ workItems, onToggleExpand, onExpandAll, onCollapseAll, onView, onEdit, onAddChild, onFilterChange }: BacklogGridProps) => {
   return (
     <>
       {/* Unified Toolbar */}
       <BacklogGridToolbar
         onExpandAll={onExpandAll}
         onCollapseAll={onCollapseAll}
+        onFilterChange={onFilterChange}
       />
 
       {/* Grid Header */}

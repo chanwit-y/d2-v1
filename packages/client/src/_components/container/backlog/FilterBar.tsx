@@ -23,7 +23,7 @@ const filterSchema = z.object({
   tags: z.enum(['all']).optional(),
 });
 
-type FilterForm = z.infer<typeof filterSchema>;
+export type FilterForm = z.infer<typeof filterSchema>;
 
 interface FilterBarProps {
   isVisible: boolean;
@@ -57,7 +57,7 @@ const FilterBar = ({ isVisible, onClose, onFilterChange }: FilterBarProps) => {
   // }, [watchedValues, onFilterChange]);
 
   const onSubmit = (data: FilterForm) => {
-    console.log('Filter data:', data);
+    console.log('onSubmit', data);
     onFilterChange?.(data);
   };
 
