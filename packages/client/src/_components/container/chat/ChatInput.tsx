@@ -103,7 +103,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 			<div className="flex items-end w-full h-full gap-2 justify-between">
 				<textarea
 					ref={inputRef}
-					className={`flex-1 resize-none bg-transparent outline-none border-none ${textColor} ${placeholderColor} text-base py-1 px-2 min-h-[${minRows * 1.5}rem] max-h-[${maxRows * 1.5}rem]`}
+					className={`flex-1 resize-none bg-transparent outline-none border-none ${textColor} ${placeholderColor} text-xs py-1 px-2 min-h-[${minRows * 1.5}rem] max-h-[${maxRows * 1.5}rem]`}
 					placeholder={loading ? "Generating response..." : placeholder}
 					aria-label={placeholder}
 					aria-describedby={showCharacterCount ? 'character-count' : undefined}
@@ -132,7 +132,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 						Clear input
 					</Tooltip.Content>
 				</Tooltip.Root>
-				<Tooltip.Root>
+				{/* <Tooltip.Root>
 					<Tooltip.Trigger asChild>
 						<button
 							type="button"
@@ -147,8 +147,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 					<Tooltip.Content side="top" className="z-50 px-2 py-1 bg-zinc-800 text-xs text-white rounded shadow">
 						New session
 					</Tooltip.Content>
-				</Tooltip.Root>
-				<div className="border-l border-zinc-700 h-6 mx-2" />
+				</Tooltip.Root> */}
+				{/* <div className="border-l border-zinc-700 h-6 mx-2" /> */}
 				<Tooltip.Root>
 					<Tooltip.Trigger asChild>
 						<button
@@ -159,9 +159,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 							tabIndex={0}
 						>
 							{loading ? (
-								<Loader2 className="w-5 h-5 animate-spin" />
+								<Loader2 className="w-4 h-4 animate-spin" color='#155dfb' />
 							) : (
-								<Send className="w-5 h-5" />
+								<Send className="w-4 h-4" />
 							)}
 						</button>
 					</Tooltip.Trigger>

@@ -169,6 +169,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 									setIsLoading(false);
 								}}
 								onFeedback={handleFeedback}
+								fontSize="xs"
 							/>
 						))
 					)}
@@ -188,7 +189,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 					</div>
 				)}
 				<div className="px-4 pb-4">
-					<ChatInput onSend={handleSendMessage} loading={isLoading} autoFocus={true} />
+					<ChatInput onSend={handleSendMessage} loading={isLoading} autoFocus={true} minRows={5} />
 				</div>
 			</div>
 		</TooltipProvider>
