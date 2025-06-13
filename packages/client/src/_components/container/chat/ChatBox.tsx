@@ -69,7 +69,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 		// Implement feedback logic if needed
 	}, []);
 
-	const handleSendMessage = useCallback(async (messageText: string) => {
+	const handleSendMessage = useCallback(async (messageText: string, type: "BA" | "QA") => {
 		const newMessage: Message = {
 			id: Date.now().toString(),
 			text: messageText,
@@ -81,7 +81,7 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
 		setIsLoading(true);
 		try {
 
-			const data = await chat(messageText);
+			const data = await chat(messageText, type);
 			// console.log('data', data);
 
 			// const data = await api.chatAmigo({

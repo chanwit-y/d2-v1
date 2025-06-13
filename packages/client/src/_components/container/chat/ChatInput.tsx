@@ -8,7 +8,7 @@ import { Button } from '@/_components/common/button';
 
 interface ChatInputProps {
 	placeholder?: string;
-	onSend: (message: string) => void;
+	onSend: (message: string, type: "BA" | "QA") => void;
 	initialValue?: string;
 	maxWidth?: string | number;
 	backgroundColor?: string;
@@ -42,6 +42,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 	autoFocus = false,
 }) => {
 	const { nextSession } = useChat();
+	const [type, setType] = useState<"BA" | "QA">("BA");
 	const [inputValue, setInputValue] = useState<string>(initialValue);
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -62,7 +63,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 	const handleSend = useCallback(() => {
 		const trimmedValue = inputValue.trim();
 		if (trimmedValue && !disabled && !loading) {
-			onSend(trimmedValue);
+			onSend(trimmedValue, type);
 			setInputValue('');
 		}
 	}, [inputValue, onSend, disabled, loading]);
@@ -135,7 +136,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 						Clear input
 					</Tooltip.Content>
 				</Tooltip.Root>
-				<DropdownMenu>
+				<DropdownMenu >
 					<DropdownMenuTrigger asChild>
 						<Button
 							variant="ghost"
@@ -143,7 +144,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 							className="text-gray-300 hover:text-white hover:bg-gray-700 gap-2 text-[10px]"
 						>
 							<BotMessageSquare className="w-4 h-4" />
-							BA
+							{type}
 							{/* <ChevronDown className="w-4 h-4" /> */}
 						</Button>
 					</DropdownMenuTrigger>
@@ -151,10 +152,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 						align="end"
 						className="bg-[#252526] border-gray-600 text-white"
 					>
-						<DropdownMenuItem className="hover:bg-gray-700">
+						<DropdownMenuItem className="hover:bg-gray-700" onClick={() => setType("BA")}>
 							BA
 						</DropdownMenuItem>
-						<DropdownMenuItem className="hover:bg-gray-700">
+						<DropdownMenuItem className="hover:bg-gray-700" onClick={() => setType("QA")}>
 							QA
 						</DropdownMenuItem>
 					</DropdownMenuContent>

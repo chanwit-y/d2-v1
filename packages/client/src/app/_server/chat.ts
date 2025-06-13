@@ -11,7 +11,7 @@ import {
 
 const db = drizzle(process.env.DATABASE_URL!);
 
-export const chat = async (message: string) => {
+export const chat = async (message: string, type: "BA" | "QA" = "BA") => {
   const model = new ChatOpenAI({
     model: "gpt-4.1",
     temperature: 0.5,
@@ -44,14 +44,15 @@ export const chat = async (message: string) => {
         "system",
         "Answer the user question based on the following context: {context}.",
       ],
-      [
-        "system",
-        `As a Business Analyst, I specialize in web application requirements—gathering and analyzing user needs, defining specifications, and aligning solutions with business goals.`,
-      ],
-//       [
-//         "system",
-//         `As a QA tester, I have solid expertise in testing web applications and websites, ensuring their functionality, usability, and performance.`,
-//       ],
+      type === "BA"
+        ? [
+            "system",
+            `As a Business Analyst, I specialize in web application requirements—gathering and analyzing user needs, defining specifications, and aligning solutions with business goals.`,
+          ]
+        : [
+            "system",
+            `As a QA tester, I have solid expertise in testing web applications and websites, ensuring their functionality, usability, and performance.`,
+          ],
       [
         "system",
         `You are a careful assistant helping answer user questions. Use only the information in the retrieved context below. If an answer is not explicitly stated, reply: "The provided information does not contain enough detail to answer that." Do not make up any rules, steps, or details that are not in the given context.`,
