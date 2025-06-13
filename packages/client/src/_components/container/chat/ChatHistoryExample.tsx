@@ -152,9 +152,9 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
   const groupedSessions = groupSessionsByDate(sessions);
 
   return (
-    <Box className="flex flex-col bg-zinc-900 text-white h-[calc(80vh-3rem)] w-full">
+    <Box className="flex flex-col bg-zinc-900 text-white h-[calc(80vh-3rem)] w-full rounded-md">
       {/* Header */}
-      <div className="flex justify-between items-center p-4 mb-2 border-b border-zinc-700">
+      <div className="flex justify-between items-center px-3 py-4 mb-2 border-b border-zinc-700">
         <Text size="3" weight="bold" className="mb-3 block">
           Chat History
         </Text>
@@ -173,26 +173,20 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
         <Box className="">
           {Object.entries(groupedSessions).map(([dateGroup, sessionsInGroup]) => (
             <Box key={dateGroup} className="mb-2">
-              <Text className="text-zinc-400 text-[0.5rem] tracking-wider font-semibold p-1  block uppercase tracking-wider">
+              <Text className="text-zinc-400 text-[0.5rem] font-semibold p-1  block uppercase tracking-wider">
                 {dateGroup}
               </Text>
               <div className="w-[95%] wrap-anywhere ">
                 {sessionsInGroup.map((session) => (
-                  <div key={session.id} className={` cursor-pointer  justify-start text-left mx-[0.35rem]  mb-2  p-2 h-auto min-h-[4rem] rounded-lg transition-all 
+                  <div key={session.id} className={` cursor-pointer  justify-start text-left mx-4  mb-2  p-2 h-auto min-h-[4rem] rounded-lg transition-all 
                     ${session.id === currentSessionId
                       ? 'bg-blue-600 hover:bg-blue-700'
                       : 'hover:bg-zinc-700'}
                   `}>
-                    {/* <Button
-                      variant={session.id === currentSessionId ? "solid" : "ghost"}
-                      className={``}
-                      onClick={() => handleSessionClick(session)}
-                    > */}
-                    {/* <div className=""> */}
                     <div className="flex items-center justify-start gap-2 mb-0.5">
                       <ChatBubbleIcon width="16" height="16" className="flex-shrink-0 text-zinc-400" />
                       <Text className="text-[13px] truncate tracking-wider">
-                        {`${session.title}xxx`}
+                        {`${session.title}`}
                       </Text>
                       <div className='flex-1' />
                       <Button
