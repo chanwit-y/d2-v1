@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Text, ScrollArea, Button, Flex } from '@radix-ui/themes';
-import { PlusIcon, ChatBubbleIcon, TrashIcon } from '@radix-ui/react-icons';
+import { PlusIcon, ChatBubbleIcon } from '@radix-ui/react-icons';
+import { FileText, Trash2 } from 'lucide-react';
 
 interface ChatSession {
   id: string;
@@ -103,7 +104,7 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
   const handleDeleteSession = (sessionId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setSessions(prev => prev.filter(s => s.id !== sessionId));
-    
+
     // If deleting current session, select the first remaining session
     if (sessionId === currentSessionId) {
       const remaining = sessions.filter(s => s.id !== sessionId);
@@ -117,7 +118,7 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
 
   const groupSessionsByDate = (sessions: ChatSession[]) => {
     const groups: Record<string, ChatSession[]> = {};
-    
+
     sessions.forEach(session => {
       const dateKey = formatDateGroup(session.timestamp);
       if (!groups[dateKey]) {
@@ -151,90 +152,83 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
   const groupedSessions = groupSessionsByDate(sessions);
 
   return (
-    <Box width={width} height={height} className="flex flex-col bg-zinc-900 text-white">
+    <Box className="flex flex-col bg-zinc-900 text-white h-[calc(80vh-3rem)] w-full">
       {/* Header */}
-      <Box className="p-4 border-b border-zinc-700">
+      <div className="flex justify-between items-center p-4 mb-2 border-b border-zinc-700">
         <Text size="3" weight="bold" className="mb-3 block">
-          Chat History Example
+          Chat History
         </Text>
-        <Button 
+        <Button
           onClick={handleNewChat}
           className="w-full bg-blue-600 hover:bg-blue-700"
           variant="solid"
           size="2"
         >
-          <PlusIcon width="16" height="16" />
-          New Chat
+          <FileText width="16" height="16" />
         </Button>
-      </Box>
+      </div>
 
       {/* Sessions List */}
-      <ScrollArea className="flex-1">
-        <Box className="p-2">
+      <ScrollArea type="always" scrollbars="vertical" className="flex-1">
+        <Box className="">
           {Object.entries(groupedSessions).map(([dateGroup, sessionsInGroup]) => (
-            <Box key={dateGroup} className="mb-4">
-              <Text size="1" weight="medium" className="text-zinc-400 px-2 py-2 block uppercase tracking-wider">
+            <Box key={dateGroup} className="mb-2">
+              <Text className="text-zinc-400 text-[0.5rem] tracking-wider font-semibold p-1  block uppercase tracking-wider">
                 {dateGroup}
               </Text>
-              <Box className="space-y-1">
+              <div className="w-[95%] wrap-anywhere ">
                 {sessionsInGroup.map((session) => (
-                  <Box key={session.id} className="group">
-                    <Button
+                  <div key={session.id} className={` cursor-pointer  justify-start text-left mx-[0.35rem]  mb-2  p-2 h-auto min-h-[4rem] rounded-lg transition-all 
+                    ${session.id === currentSessionId
+                      ? 'bg-blue-600 hover:bg-blue-700'
+                      : 'hover:bg-zinc-700'}
+                  `}>
+                    {/* <Button
                       variant={session.id === currentSessionId ? "solid" : "ghost"}
-                      className={`w-full justify-start text-left p-3 h-auto min-h-[4rem] rounded-lg transition-all ${
-                        session.id === currentSessionId 
-                          ? 'bg-blue-600 hover:bg-blue-700' 
-                          : 'hover:bg-zinc-800'
-                      }`}
+                      className={``}
                       onClick={() => handleSessionClick(session)}
-                    >
-                      <Flex direction="column" width="100%" align="start" className="min-w-0">
-                        <Flex align="center" justify="between" width="100%" className="mb-1">
-                          <Flex align="center" gap="2" className="min-w-0 flex-1">
-                            <ChatBubbleIcon width="16" height="16" className="flex-shrink-0 text-zinc-400" />
-                            <Text size="2" weight="medium" className="truncate">
-                              {session.title}
-                            </Text>
-                          </Flex>
-                          <Button
-                            variant="ghost"
-                            size="1"
-                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 hover:bg-red-600"
-                            onClick={(e) => handleDeleteSession(session.id, e)}
-                          >
-                            <TrashIcon width="12" height="12" />
-                          </Button>
-                        </Flex>
-                        <Text size="1" className="text-zinc-400 truncate w-full text-left mb-1">
-                          {session.lastMessage}
-                        </Text>
-                        <Flex align="center" justify="between" width="100%">
-                          <Text size="1" className="text-zinc-500">
-                            {session.messageCount} messages
-                          </Text>
-                          <Text size="1" className="text-zinc-500">
-                            {session.timestamp.toLocaleTimeString('en-US', { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })}
-                          </Text>
-                        </Flex>
-                      </Flex>
-                    </Button>
-                  </Box>
+                    > */}
+                    {/* <div className=""> */}
+                    <div className="flex items-center justify-start gap-2 mb-0.5">
+                      <ChatBubbleIcon width="16" height="16" className="flex-shrink-0 text-zinc-400" />
+                      <Text className="text-[13px] truncate tracking-wider">
+                        {`${session.title}xxx`}
+                      </Text>
+                      <div className='flex-1' />
+                      <Button
+                        variant="ghost"
+                        size="1"
+                        className="opacity-0 group-hover:opacity-100 flex-shrink-0 "
+                        onClick={(e) => handleDeleteSession(session.id, e)}
+                      >
+                        <Trash2 width="12" height="12" />
+                      </Button>
+                    </div>
+
+                    <p className="text-xs text-zinc-300 line-clamp-1 ">
+                      {session.lastMessage}
+                    </p>
+                    <Flex align="center" justify="between" width="100%" className='text-[9px]'>
+                      <Text  className="text-zinc-400">
+                        {session.messageCount} messages
+                      </Text>
+                      <Text size="1" className="text-zinc-400">
+                        {session.timestamp.toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </Text>
+                    </Flex>
+
+                  </div>
                 ))}
-              </Box>
+              </div>
             </Box>
           ))}
         </Box>
       </ScrollArea>
 
-      {/* Footer Stats */}
-      <Box className="p-4 border-t border-zinc-700">
-        <Text size="1" className="text-zinc-500 text-center">
-          {sessions.length} total conversations
-        </Text>
-      </Box>
+    
     </Box>
   );
 } 

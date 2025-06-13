@@ -1,7 +1,10 @@
 import { useState, useCallback, type ChangeEvent, type KeyboardEvent, type FormEvent, useEffect, useRef } from 'react';
-import { Send, FileText, X, Loader2 } from 'lucide-react';
+import { Send, FileText, X, Loader2, Menu, ChevronDown, BotMessageSquare } from 'lucide-react';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useChat } from './ChatContext';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/_components/common/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/_components/common/dropdown-menu';
+import { Button } from '@/_components/common/button';
 
 interface ChatInputProps {
 	placeholder?: string;
@@ -125,30 +128,37 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 							disabled={disabled || loading}
 							aria-label="Clear input"
 						>
-							<X className="w-5 h-5" />
+							<X className="w-4 h-4" />
 						</button>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="top" className="z-50 px-2 py-1 bg-zinc-800 text-xs text-white rounded shadow">
 						Clear input
 					</Tooltip.Content>
 				</Tooltip.Root>
-				{/* <Tooltip.Root>
-					<Tooltip.Trigger asChild>
-						<button
-							type="button"
-							onClick={handleNewSession}
-							className={`p-2 rounded ${iconColor} hover:bg-zinc-700 disabled:opacity-50`}
-							disabled={disabled || loading}
-							aria-label="New session"
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button
+							variant="ghost"
+							size="xs"
+							className="text-gray-300 hover:text-white hover:bg-gray-700 gap-2 text-[10px]"
 						>
-							<FileText className="w-5 h-5" />
-						</button>
-					</Tooltip.Trigger>
-					<Tooltip.Content side="top" className="z-50 px-2 py-1 bg-zinc-800 text-xs text-white rounded shadow">
-						New session
-					</Tooltip.Content>
-				</Tooltip.Root> */}
-				{/* <div className="border-l border-zinc-700 h-6 mx-2" /> */}
+							<BotMessageSquare className="w-4 h-4" />
+							BA
+							{/* <ChevronDown className="w-4 h-4" /> */}
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent
+						align="end"
+						className="bg-[#252526] border-gray-600 text-white"
+					>
+						<DropdownMenuItem className="hover:bg-gray-700">
+							BA
+						</DropdownMenuItem>
+						<DropdownMenuItem className="hover:bg-gray-700">
+							QA
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 				<Tooltip.Root>
 					<Tooltip.Trigger asChild>
 						<button
