@@ -6,9 +6,12 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "dev": "next dev packages/client --turbopack",
+    "app": "tauri dev",
+    "build:app": "tauri build",
     "db:gen": "cd packages/db && npx drizzle-kit push"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "1.0.0",
     "@types/bun": "latest",
     "@types/pg": "^8.15.4",
     "drizzle-kit": "^0.31.1",

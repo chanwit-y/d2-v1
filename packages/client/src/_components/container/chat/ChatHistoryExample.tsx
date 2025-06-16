@@ -173,7 +173,7 @@ export function ChatHistoryExample({ width = "100%", height = "100%" }: ChatHist
         <Box className="">
           {Object.entries(groupedSessions).map(([dateGroup, sessionsInGroup]) => (
             <Box key={dateGroup} className="mb-2">
-              <Text className="text-zinc-400 text-[0.5rem] font-semibold p-1  block uppercase tracking-wider">
+              <Text className="text-zinc-400 text-[0.5rem] font-semibold px-2 py-1  block uppercase tracking-wider">
                 {dateGroup}
               </Text>
               <div className="w-[95%] wrap-anywhere ">

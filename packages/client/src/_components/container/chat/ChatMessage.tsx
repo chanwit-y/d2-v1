@@ -149,7 +149,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 ),
                 // Lists
                 ul: ({ children, ...props }) => (
-                  <ul className={`list-disc list-inside mb-4 space-y-1 text-zinc-700 dark:text-zinc-300 ${getFontSizeClass('text-base')}`} {...props}>
+                  <ul className={`list-disc list-inside mb-4 pl-4 space-y-1 text-zinc-700 dark:text-zinc-300 ${getFontSizeClass('text-base')}`} {...props}>
                     {children}
                   </ul>
                 ),
