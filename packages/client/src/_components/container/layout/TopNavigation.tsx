@@ -26,7 +26,7 @@ const TopNavigation = ({ onToggleSidebar }: TopNavigationProps) => {
 					<div className="w-8 h-8  rounded flex items-center justify-center">
 						<Image src={"/asset/logo.png"} alt="logo" width={40} height={40} />
 					</div>
-					<span className="text-white font-medium">d2~RAG</span>
+					<span className="text-white font-medium">d2~</span>
 				</div>
 			</div>
 

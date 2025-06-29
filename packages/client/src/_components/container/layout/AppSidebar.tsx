@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/_components/common/button';
-import { Database, Bot, Settings } from 'lucide-react';
+import { Crown, Bot, Settings, Workflow } from 'lucide-react';
 
 interface AppSidebarProps {
 	isOpen: boolean;
@@ -20,8 +20,14 @@ const AppSidebar = ({ isOpen }: AppSidebarProps) => {
 			isActive: pathname === '/'
 		},
 		{
-			icon: Database,
-			label: 'Database',
+			icon: Workflow,
+			label: 'MindMap',
+			path: '/map',
+			isActive: pathname === '/map'
+		},
+		{
+			icon: Crown,
+			label: 'Backlog',
 			path: '/backlog',
 			isActive: pathname === '/backlog'
 		},
@@ -31,6 +37,7 @@ const AppSidebar = ({ isOpen }: AppSidebarProps) => {
 			path: '/settings',
 			isActive: pathname === '/settings'
 		}
+
 	];
 
 	const handleNavigation = (path: string) => {
